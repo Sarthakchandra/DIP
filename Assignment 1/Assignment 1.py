@@ -10,113 +10,113 @@ import os
 
 #================================================================================================
 
-# # we start by taking all our inputs 
-# print("Q3 Solution goes here: ")
-# loc = input("Enter your image location: ")
-# # loc = r"./SarthakChandra_InputImage1.jpg"
-# inter = 0.5
-# # loc = r"C:\Users\sarth\Desktop\x5.bmp"
-# # inter = 4
-# img = cv.imread(loc,0)
-# print(img.shape)
-# cv.imshow('input image',img)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
+# we start by taking all our inputs 
+print("Q3 Solution goes here: ")
+loc = input("Enter your image location: ")
+# loc = r"./SarthakChandra_InputImage1.jpg"
+inter = 0.5
+# loc = r"C:\Users\sarth\Desktop\x5.bmp"
+# inter = 4
+img = cv.imread(loc,0)
+print(img.shape)
+cv.imshow('input image',img)
+cv.waitKey(0)
+cv.destroyAllWindows()
 
-# #Now that we have displayed our input image, we take the interpolation factor
+#Now that we have displayed our input image, we take the interpolation factor
 
-# print("Interpolation Factor is: ", inter)
+print("Interpolation Factor is: ", inter)
 
-# #We have made a function to perform billienar interpolation
+#We have made a function to perform billienar interpolation
 
-# def bilinear_interpolation(img,inter):
-#     a = np.array(img)
-#     S = a.shape
+def bilinear_interpolation(img,inter):
+    a = np.array(img)
+    S = a.shape
 
-#     # print(S)
+    # print(S)
 
-#     R = floor(S[0]*inter)
-#     C = floor(S[1]*inter)
+    R = floor(S[0]*inter)
+    C = floor(S[1]*inter)
 
-#     # print(type(R),type(C))
+    # print(type(R),type(C))
 
-#     mat = np.ones((R,C))*-1
+    mat = np.ones((R,C))*-1
 
-#     #Placing the values at their specific positions
+    #Placing the values at their specific positions
 
-#     for i in range(img.shape[0]):
-#         for j in range(img.shape[1]):
-#             mat[floor(i*inter)][floor(j*inter)] = a[i][j]
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            mat[floor(i*inter)][floor(j*inter)] = a[i][j]
 
-#     #Range of known values
+    #Range of known values
 
-#     x_mat = floor(i*inter)
-#     y_mat = floor(j*inter)
+    x_mat = floor(i*inter)
+    y_mat = floor(j*inter)
     
-#     # Applying the algorithm for finding the 4 nearest neighbours as taught in the tutorial 
+    # Applying the algorithm for finding the 4 nearest neighbours as taught in the tutorial 
 
-#     for i in range(x_mat+1):  
-#         for j in range(y_mat+1):
-#             if mat[i][j] == -1:
+    for i in range(x_mat+1):  
+        for j in range(y_mat+1):
+            if mat[i][j] == -1:
 
-#                 #Applying bilinear Interpolation for every NN in orignal Matrix
+                #Applying bilinear Interpolation for every NN in orignal Matrix
 
-#                 x = i/inter
-#                 y = j/inter
+                x = i/inter
+                y = j/inter
 
-#                 if ceil(x) != x:
-#                     x1 = floor(x)
-#                     x2 = ceil(x)
-#                 else: 
-#                     if x == 0:
-#                         x1 = 0
-#                         x2 = 1
-#                     else:
-#                         x1 = x-1
-#                         x2 = x
-#                 if ceil(y) != y:
-#                     y1 = floor(y)
-#                     y2 = ceil(y)
-#                 else: 
-#                     if y == 0:
-#                         y1 = 0
-#                         y2 = 1
-#                     else:
-#                         y1 = y-1
-#                         y2 = y
+                if ceil(x) != x:
+                    x1 = floor(x)
+                    x2 = ceil(x)
+                else: 
+                    if x == 0:
+                        x1 = 0
+                        x2 = 1
+                    else:
+                        x1 = x-1
+                        x2 = x
+                if ceil(y) != y:
+                    y1 = floor(y)
+                    y2 = ceil(y)
+                else: 
+                    if y == 0:
+                        y1 = 0
+                        y2 = 1
+                    else:
+                        y1 = y-1
+                        y2 = y
 
-#                 #Neighbours co-ordinate ranges
+                #Neighbours co-ordinate ranges
 
-#                 x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
+                x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
 
-#                 #X Matrix for Neighbours
+                #X Matrix for Neighbours
 
-#                 X = [
-#                     [x1,y1,x1*y1,1],[x1,y2,x1*y2,1],[x2,y2,x2*y2,1],[x2,y1,x2*y1,1]]
-#                 V = [[a[x1][y1]],[a[x1][y2]],[a[x2][y2]],[a[x2][y1]]]
-#                 # A = X^-1.V
-#                 A = np.dot(np.linalg.inv(X),V)
-#                 #Finding interpolated Pixel Value
-#                 mat[i][j] = np.dot(np.array([x,y,x*y,1]),A)
+                X = [
+                    [x1,y1,x1*y1,1],[x1,y2,x1*y2,1],[x2,y2,x2*y2,1],[x2,y1,x2*y1,1]]
+                V = [[a[x1][y1]],[a[x1][y2]],[a[x2][y2]],[a[x2][y1]]]
+                # A = X^-1.V
+                A = np.dot(np.linalg.inv(X),V)
+                #Finding interpolated Pixel Value
+                mat[i][j] = np.dot(np.array([x,y,x*y,1]),A)
     
-#     # Mirroring the Borders
+    # Mirroring the Borders
 
-#     for i in range (x_mat+1):
-#         for j in range(y_mat+1,len(mat[0])):
-#             mat[i][j] = mat[i][j-1]
+    for i in range (x_mat+1):
+        for j in range(y_mat+1,len(mat[0])):
+            mat[i][j] = mat[i][j-1]
 
-#     for j in range(len(mat[0])):
-#         for i in range(x_mat+1,len(mat)):
-#             mat[i][j] = mat[i-1][j]
-#     return mat
+    for j in range(len(mat[0])):
+        for i in range(x_mat+1,len(mat)):
+            mat[i][j] = mat[i-1][j]
+    return mat
 
-# # Calling the function here
+# Calling the function here
 
-# mat_inter = bilinear_interpolation(img,inter)
-# print(mat_inter.shape)
-# cv.imshow("Q3_Output image",np.uint8(mat_inter))
-# cv.waitKey(0)
-# cv.destroyAllWindows()
+mat_inter = bilinear_interpolation(img,inter)
+print(mat_inter.shape)
+cv.imshow("Q3_Output image",np.uint8(mat_inter))
+cv.waitKey(0)
+cv.destroyAllWindows()
 
 #================================================================================================
 
