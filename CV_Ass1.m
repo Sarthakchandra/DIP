@@ -11,7 +11,7 @@ imwrite(Ig1,"BigTree_Kmeans.png")
 a = unique(Ig1);
 % [C1, ia1, ic1] = unique(img1);
 % a_counts = accumarray(ic1,1);
-% value_counts = [C1, a_counts];
+value_counts = [C1, a_counts];
 k = 1;
 for i = 1:size(Ig1)
     for j =1:size(Ig1)
